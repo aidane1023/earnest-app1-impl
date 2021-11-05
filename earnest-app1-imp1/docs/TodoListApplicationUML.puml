@@ -1,0 +1,47 @@
+@startuml
+
+
+
+TodoListApplication -- TodoListEditList
+TodoListApplication -- TodoListLoadList
+TodoListApplication -- TodoListSaveList
+TodoListEditList *-- TodoListItems
+
+
+class TodoListItems {
+    - String description
+    - String dueDate
+    - boolean complete
+    + saveItem(items)
+}
+
+class TodoListEditList {
+    - String[] items
+    - String selectedItem
+    + addItem(items)
+    + deleteItem(items, selectedItem)
+    + editItem(items, selectedItem)
+    + clearList(items)
+}
+
+class TodoListLoadList {
+    -String fileName;
+    -String fileLocation;
+    +loadTodoList()
+}
+
+class TodoListSaveList {
+    -String fileName;
+    -String fileLocation;
+    +saveTodoList()
+}
+
+class TodoListApplication {
+    + void start(Stage stage)
+    + static void main(String[] args)
+    + void loadListButton()
+    + void saveListButton()
+    + void displayChoicePicker()
+}
+
+@enduml
