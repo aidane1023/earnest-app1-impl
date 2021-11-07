@@ -1,33 +1,31 @@
+/*
+ *  UCF COP3330 Fall 2021 Application Assignment 1 Solution
+ *  Copyright 2021 aidan earnest
+ */
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-import java.io.IOException;
+import java.io.FileWriter;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable {
     private boolean completionState = false;
     private boolean editorGate = false;
+    List<String> strings = new ArrayList<>();
 
     //First row controls
     @FXML
     Button saveListButton;
     @FXML
-    Button loadButton;
+    ChoiceBox<String> viewDropdown = new ChoiceBox<>();
     @FXML
-    ChoiceBox<String> viewDropdown;
+    Button showButton;
 
     //Properties of event
     @FXML
@@ -49,6 +47,12 @@ public class Controller implements Initializable {
     @FXML
     Button clearButton;
 
+    //Save components
+    @FXML
+    TextField fileName;
+    @FXML
+    TextField fileLocation;
+
     //List view manager
     @FXML
     ListView<Event> eventList = new ListView<>();
@@ -61,114 +65,27 @@ public class Controller implements Initializable {
         viewDropdown.getItems().add("Completed");
         viewDropdown.getItems().add("Incomplete");
 
-        viewDropdown.setValue("All");
-    }
-
-    public void openSave(ActionEvent actionEvent) {
-        //Open TodoListSaveList fxml
-        openFXML("TodoListSaveItem.fxml", "Todo List Save");
-    }
-    public void saveList(ActionEvent actionEvent) {
-        //Save contents of list to a textFile
-        //File name and location are pulled from gui
-
-        //Clear current list
-        //Clear display
-    }
-
-    public void openLoad(ActionEvent actionEvent) {
-        //Open TodoListLoadList fxml
-        openFXML("TodoListLoadList.fxml", "Todo List Search");
-    }
-    public void loadList(HashMap<Integer, String[]> todoLists) {
-        //Open file selection fxml
-
-        //Clear current list
-        //add items from previously saved list to current display
-    }
-
-    public void displayChoicePicker(ActionEvent actionEvent) {
-        ObservableList<Event> complete = FXCollections.observableArrayList();
-        ObservableList<Event> incomplete = FXCollections.observableArrayList();
-        //The dropdown will display 3 options: all, complete, incomplete
-        //Upon each state visible list changes
-
-        //Based on selection, gui will present items meeting selection in current list view
-        if(Objects.equals(viewDropdown.getValue(), "Incomplete")) {
-            for (Event event : list) {
-                completionState = eventList.getSelectionModel().getSelectedItem().getComplete();
-                if (!completionState) {
-                    //fill fields
-                    dueDate.setValue(event.getDueDate());
-                    description.setText(event.getDescription());
-                    //Update List
-                    incomplete.add(new Event(false, dueDate.getValue(), description.getText()));
-                }
-            }
-            eventList.setItems(incomplete);
-        }
-        if(Objects.equals(viewDropdown.getValue(), "Completed")) {
-            for (Event event : list) {
-                completionState = eventList.getSelectionModel().getSelectedItem().getComplete();
-                if (completionState) {
-                    //fill fields
-                    dueDate.setValue(event.getDueDate());
-                    description.setText(event.getDescription());
-                    //Update List
-                    complete.add(new Event(true, dueDate.getValue(), description.getText()));
-                }
-            }
-            eventList.setItems(complete);
-        }
-        if(Objects.equals(viewDropdown.getValue(), "All")) {
-            eventList.setItems(list);
-        }
-    }
-
-    private void openFXML(String file, String name) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(file));
-            Parent root = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setTitle(name);
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changeCompletion(ActionEvent actionEvent) {
-        //Swap completion state of event
-        completionState = eventList.getSelectionModel().getSelectedItem().getComplete();
-        completionState = !completionState;
-        //fill fields
-        dueDate.setValue(list.get(eventList.getSelectionModel().getSelectedIndex()).getDueDate());
-        description.setText(list.get(eventList.getSelectionModel().getSelectedIndex()).getDescription());
-        //Update List
-        list.set(eventList.getSelectionModel().getSelectedIndex(),new Event(completionState, dueDate.getValue(), description.getText()));
-        //Adjust which display list
-        eventList.setItems(list);
-        refresh();
-
+        this.viewDropdown.setValue("All");
     }
 
     public void newEvent(ActionEvent actionEvent) {
         //Add event to list view
-        if (!editorGate) {
-            list.add(new Event(completionState, dueDate.getValue(), description.getText()));
-            eventList.setItems(list);
-        }
-        else {
-            list.set(eventList.getSelectionModel().getSelectedIndex(),new Event(completionState, dueDate.getValue(), description.getText()));
-            eventList.setItems(list);
-            editorGate = false;
-        }
+        if (list.size() <= 100) {
+            description.setText(description.getText());
+            if (!description.getText().isEmpty()) {
+                if (!editorGate) {
+                    list.add(new Event(completionState, dueDate.getValue(), description.getText()));
+                    eventList.setItems(list);
+                } else {
+                    list.set(eventList.getSelectionModel().getSelectedIndex(), new Event(completionState, dueDate.getValue(), description.getText()));
+                    eventList.setItems(list);
+                    editorGate = false;
+                }
 
-        //refresh item components
-        refresh();
+                //refresh item components
+                refresh();
+            }
+        }
     }
 
     public void deleteEvent(ActionEvent actionEvent) {
@@ -183,12 +100,82 @@ public class Controller implements Initializable {
 
     public void editEvent(ActionEvent actionEvent) {
         //Fill event fields
-        dueDate.setValue(list.get(eventList.getSelectionModel().getSelectedIndex()).getDueDate());
-        description.setText(list.get(eventList.getSelectionModel().getSelectedIndex()).getDescription());
-        editorGate = true;
+        try {
+            dueDate.setValue(list.get(eventList.getSelectionModel().getSelectedIndex()).getDueDate());
+            description.setText(list.get(eventList.getSelectionModel().getSelectedIndex()).getDescription());
+            editorGate = true;
+        } catch (Exception e) {
+            System.out.println("No Selection");
+        }
+    }
+
+    public void changeCompletion(ActionEvent actionEvent) {
+        //Swap completion state of event
+        try {
+            completionState = eventList.getSelectionModel().getSelectedItem().getComplete();
+            completionState = !completionState;
+            //fill fields
+            dueDate.setValue(list.get(eventList.getSelectionModel().getSelectedIndex()).getDueDate());
+            description.setText(list.get(eventList.getSelectionModel().getSelectedIndex()).getDescription());
+            //Update List
+            list.set(eventList.getSelectionModel().getSelectedIndex(), new Event(completionState, dueDate.getValue(), description.getText()));
+            //Adjust which display list
+            eventList.setItems(list);
+            refresh();
+        } catch (Exception e) {
+            System.out.println("No Selection");
+        }
+
+    }
+
+    public void displayChoicePicker(ActionEvent actionEvent) {
+        ObservableList<Event> complete = FXCollections.observableArrayList();
+        ObservableList<Event> incomplete = FXCollections.observableArrayList();
+        //The dropdown will display 3 options: all, complete, incomplete
+        //Upon each state visible list changes
+
+        //Based on selection, gui will present items meeting selection in current list view
+        if(!Objects.equals(viewDropdown.getValue(), "All")) {
+            for (Event event : list) {
+                completionState = event.getComplete();
+                dueDate.setValue(event.getDueDate());
+                description.setText(event.getDescription());
+                if (!completionState) {
+                    //Update List
+                    incomplete.add(new Event(false, dueDate.getValue(), description.getText()));
+                } else {
+                    //Update List
+                    complete.add(new Event(true, dueDate.getValue(), description.getText()));
+                }
+                //Update displayed list
+                if (Objects.equals(viewDropdown.getValue(), "Incomplete")) {
+                    eventList.setItems(incomplete);
+                } else {
+                    eventList.setItems(complete);
+                }
+            }
+        }
+        if(Objects.equals(viewDropdown.getValue(), "All")) {
+            eventList.setItems(list);
+        }
+
+        refresh();
+    }
+
+    public void saveList(ActionEvent actionEvent) {
+        //Write to file
+        writeFile();
+
+        //Empty components for display
+        emptyList();
     }
 
     public void clearList(ActionEvent actionEvent) {
+        //Clear list from Manager page
+        emptyList();
+    }
+
+    public void emptyList() {
         //Clear all events from list
         list.remove(0, list.size());
         //Update display
@@ -201,4 +188,24 @@ public class Controller implements Initializable {
         description.setText(null);
     }
 
+    public void writeFile() {
+        //Convert to string
+        for (Event event : list) {
+            strings.add(event.toString());
+        }
+        System.out.println(strings.toString());
+
+        //Write to file
+
+        try {
+            FileWriter writer = new FileWriter(fileLocation.getText() +"\\"+ fileName.getText() + ".txt");
+            for (String str : strings) {
+                writer.write(str + System.lineSeparator());
+            }
+            writer.close();
+
+        } catch (Exception e) {
+            System.out.println("Error writing to file");
+        }
+    }
 }

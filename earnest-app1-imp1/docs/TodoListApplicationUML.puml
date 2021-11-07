@@ -1,47 +1,57 @@
 @startuml
 
+TodoListApplication -- Controller
+Controller -- Event
 
-
-TodoListApplication -- TodoListEditList
-TodoListApplication -- TodoListLoadList
-TodoListApplication -- TodoListSaveList
-TodoListEditList *-- TodoListItems
-
-
-class TodoListItems {
+class Event {
     - String description
-    - String dueDate
+    - LocalDate dueDate
     - boolean complete
-    + saveItem(items)
+    + getDescription()
+    + getDueDate()
+    + getComplete()
+    + setDescription()
+    + setDueDate()
+    + setComplete()
+    + Event(complete, dueDate, description)
+    + toString()
 }
 
-class TodoListEditList {
-    - String[] items
-    - String selectedItem
-    + addItem(items)
-    + deleteItem(items, selectedItem)
-    + editItem(items, selectedItem)
-    + clearList(items)
-}
-
-class TodoListLoadList {
-    -String fileName;
-    -String fileLocation;
-    +loadTodoList()
-}
-
-class TodoListSaveList {
-    -String fileName;
-    -String fileLocation;
-    +saveTodoList()
+class Controller {
+    - boolean completionState
+    - boolean editGate
+    - Button saveListButton
+    - Button showButton;
+    - Button completion
+    - Button addButton
+    - Button deleteButton
+    - Button editButton
+    - Button clearButton
+    - ChoiceBox<String> viewDropdown
+    - DatePicker dueDate
+    - List<String> strings
+    - ListView<Event> eventList
+    - ObservableList<Event> list
+    - TextField description
+    - TextField fileName
+    - TextField fileLocation
+    + initialize(url, resourceBundle)
+    + newEvent(actionEvent)
+    + deleteEvent(actionEvent)
+    + editEvent(actionEvent)
+    + changeCompletion(actionEvent)
+    + displayChoicePicker(actionEvent)
+    + public void saveList(actionEvent)
+    + clearList(actionEvent)
+    + emptyList()
+    + private void refresh()
+    + public void writeFile()
 }
 
 class TodoListApplication {
     + void start(Stage stage)
     + static void main(String[] args)
-    + void loadListButton()
-    + void saveListButton()
-    + void displayChoicePicker()
+
 }
 
 @enduml
