@@ -8,8 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox prefHeight="47.0" prefWidth="580.0">
          <children>
@@ -37,7 +36,7 @@
             <Insets left="20.0" right="20.0" />
          </VBox.margin>
       </HBox>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Save">
+      <Button fx:id="saveListButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#saveList" prefHeight="35.0" prefWidth="120.0" text="Save">
          <VBox.margin>
             <Insets top="20.0" />
          </VBox.margin>

@@ -4,6 +4,7 @@
  */
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Event {
     private String description;
@@ -39,17 +40,20 @@ public class Event {
 
     @Override
     public String toString() {
+        //Format how date appears
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //Format list view
         String output;
         if (!this.getComplete()) {
-            output = "Incomplete  ";
+            output = "Incomplete   ";
         } else {
-            output = "Complete  ";
+            output = "Complete   ";
         }
         if (this.getDueDate() == null) {
             output = output + this.description;
         } else {
-            output = output + this.getDueDate() + " " + this.description;
+            String date = (formatter.format(this.getDueDate()));
+            output = output + date + "   " + this.description;
         }
         return output;
     }

@@ -10,20 +10,23 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TodoListApplication">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
    <children>
-      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="80.0">
+      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="5.0">
          <children>
-            <Button fx:id="loadButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Load List" />
+            <Button fx:id="loadButton" mnemonicParsing="false" onAction="#openLoad" prefHeight="35.0" prefWidth="120.0" text="Load List" />
+            <Separator orientation="VERTICAL" prefHeight="46.0" prefWidth="50.0" visible="false" />
             <ChoiceBox fx:id="viewDropdown" prefWidth="150.0" />
-            <Button fx:id="saveListButton" mnemonicParsing="false" onAction="#saveList" prefHeight="35.0" prefWidth="120.0" text="Save List" />
+            <Button fx:id="showButton" mnemonicParsing="false" onAction="#displayChoicePicker" text="Show" />
+            <Separator orientation="VERTICAL" prefHeight="46.0" prefWidth="50.0" visible="false" />
+            <Button fx:id="saveListButton" mnemonicParsing="false" onAction="#openSave" prefHeight="35.0" prefWidth="120.0" text="Save List" />
          </children>
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="570.0" spacing="20.0">
          <children>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#newEvent" prefHeight="28.0" prefWidth="87.0" text="Add Item" />
-            <DatePicker fx:id="dueDate" prefHeight="26.0" prefWidth="105.0" />
-            <TextField fx:id="description" prefHeight="26.0" prefWidth="366.0">
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#newEvent" prefHeight="28.0" prefWidth="87.0" text="Add" />
+            <DatePicker fx:id="dueDate" prefHeight="26.0" prefWidth="116.0" promptText="Due date..." />
+            <TextField fx:id="description" prefHeight="26.0" prefWidth="366.0" promptText="Event description...">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -40,12 +43,12 @@
       </ListView>
       <HBox alignment="CENTER" prefHeight="89.0" prefWidth="600.0" spacing="10.0">
          <children>
-            <Button fx:id="completion" mnemonicParsing="false" onAction="#changeCompletion" prefHeight="30.0" prefWidth="120.0" text="Mark Completed" />
+            <Button fx:id="completion" mnemonicParsing="false" onAction="#changeCompletion" prefHeight="30.0" prefWidth="120.0" text="Flip Completion" />
             <Separator orientation="VERTICAL" prefHeight="70.0" prefWidth="25.0" visible="false" />
             <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="30.0" prefWidth="120.0" text="Delete Item" />
             <Button fx:id="editButton" mnemonicParsing="false" onAction="#editEvent" prefHeight="30.0" prefWidth="120.0" text="Edit Item" />
             <Separator orientation="VERTICAL" prefHeight="70.0" prefWidth="25.0" visible="false" />
-            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearList" prefHeight="30.0" prefWidth="120.0" text="Clear List" />
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearList" prefHeight="30.0" prefWidth="120.0" text="Clear Entire List" />
          </children>
          <padding>
             <Insets top="5.0" />
