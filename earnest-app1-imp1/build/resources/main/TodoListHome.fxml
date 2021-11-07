@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="TodoListApplication">
+   <children>
+      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="80.0">
+         <children>
+            <Button fx:id="loadListButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Load List" />
+            <ChoiceBox fx:id="viewDropdown" prefWidth="150.0" />
+            <Button fx:id="saveListButton" mnemonicParsing="false" onAction="#saveList" prefHeight="35.0" prefWidth="120.0" text="Save" />
+         </children>
+      </HBox>
+      <ListView fx:id="eventList" prefHeight="124.0" prefWidth="600.0">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+      </ListView>
+      <HBox alignment="CENTER" prefHeight="143.0" prefWidth="600.0" spacing="80.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="100.0" prefWidth="174.0" spacing="5.0">
+               <children>
+                  <Button fx:id="addButton" mnemonicParsing="false" onAction="#newEvent" prefHeight="34.0" prefWidth="120.0" text="Add Item" />
+                  <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="35.0" prefWidth="120.0" text="Delete Item" />
+                  <Button fx:id="editButton" mnemonicParsing="false" onAction="#editEvent" prefHeight="34.0" prefWidth="122.0" text="Edit Item" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="66.0" prefWidth="182.0" spacing="5.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" text="Mark Completed" />
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clearList" prefHeight="35.0" prefWidth="120.0" text="Clear List" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>
